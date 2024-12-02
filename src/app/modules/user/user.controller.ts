@@ -18,3 +18,7 @@ const createStudent = async (req: Request, res: Response) => {
     console.log(err);
   }
 };
+
+export const UserControllers = {
+  createStudent,
+};

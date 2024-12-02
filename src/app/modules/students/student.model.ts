@@ -47,7 +47,7 @@ const guardianSchema = new Schema<Guardian>({
   },
 });
 
-const localGuradianSchema = new Schema<LocalGuardian>({
+const localGuardianSchema = new Schema<LocalGuardian>({
   name: {
     type: String,
     required: true,
@@ -68,40 +68,39 @@ const localGuradianSchema = new Schema<LocalGuardian>({
 
 const studentSchema = new Schema<Student>({
   id: { type: String },
+  user: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    unique: true,
+    ref: 'User',
+  },
   name: {
-    userNameSchema,
+    type: userNameSchema, // Correct embedding of userNameSchema
     required: true,
   },
   gender: {
-    enum: {
-      values: ['male', 'female'],
-    },
+    type: String,
+    enum: ['male', 'female'], // Proper use of enum
   },
   dateOfBirth: { type: String },
   email: { type: String, required: true },
   contactNo: { type: String, required: true },
   emergencyContactNo: { type: String, required: true },
   bloodGroup: {
-    enum: {
-      values: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-    },
+    type: String,
+    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], // Proper use of enum
   },
   presentAddress: { type: String, required: true },
   permanentAddress: { type: String, required: true },
   guardian: {
-    guardianSchema,
+    type: guardianSchema, // Correct embedding of guardianSchema
     required: true,
   },
   localGuardian: {
-    localGuradianSchema,
+    type: localGuardianSchema, // Correct embedding of localGuardianSchema
     required: true,
   },
   profileImg: { type: String },
-  isActive: {
-    enum: {
-      values: ['active', 'blocked'],
-    },
-  },
 });
 
 export const StudentModel = model<Student>('Student', studentSchema);

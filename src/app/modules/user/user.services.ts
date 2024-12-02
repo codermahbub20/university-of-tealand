@@ -1,31 +1,35 @@
 import config from '../../config';
-import { NewUser, TUser } from './user.interface';
+import { Student } from '../students/student.interface';
+import { StudentModel } from '../students/student.model';
+import { TUser } from './user.interface';
 import { User } from './user.model';
 
-const createStudentIntoDB = async (password: string, student: TUser) => {
+const createStudentIntoDB = async (password: string, studentData: Student) => {
   // create a object
-  let user: NewUser = {};
+  let userData: Partial<TUser> = {};
 
   // if password is not given , set password is default password
 
-  user.password = password || (config.default_pass as string);
+  userData.password = password || (config.default_pass as string);
 
   //  set the role
-  user.role = 'student';
+  userData.role = 'student';
 
   //   set manually generated id
-  user.id = '225134013';
+  userData.id = '225134013';
 
   // create a user
-  const result = await User.create(user);
+  const newUser = await User.create(userData);
 
   //    create a student
-  if (Object.keys(result).length) {
+  if (Object.keys(newUser).length) {
     // set id , _id as user
-    student.id = result.id;
-    student.user = result._id;
+    studentData.id = newUser.id;
+    studentData.user = newUser._id;
+
+    const newStudent = await StudentModel.create(studentData);
+    return newStudent;
   }
-  return result;
 };
 
 export const UserServices = {
