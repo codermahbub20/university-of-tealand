@@ -9,7 +9,7 @@ const globalErrorHandler = (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+): any => {
   const statusCode = 500;
   const message = err.message || 'Something went wrong!';
 

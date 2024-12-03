@@ -6,6 +6,7 @@ import { StudentRoutes } from './app/modules/students/student.routes';
 import { userRoutes } from './app/modules/user/user.routes';
 import { error } from 'console';
 import globalErrorHandler from './app/middlewares/globalErrorHandalers';
+import notFound from './app/middlewares/notFound';
 
 //  parsers
 app.use(express.json());
@@ -20,5 +21,8 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use(globalErrorHandler);
+
+//Not Found
+app.use(notFound);
 
 export default app;
