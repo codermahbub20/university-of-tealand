@@ -1,14 +1,7 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { StudentServices } from './student.service';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
-
-// Create CatchAsync Function
-const CatchAsync = (fn: RequestHandler) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    Promise.resolve(fn(req, res, next)).catch((err) => next(err));
-  };
-};
+import CatchAsync from '../../utils/CatchAsync';
 
 const getSingleStudent = CatchAsync(async (req, res, next) => {
   const { studentId } = req.params;
