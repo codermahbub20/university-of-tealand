@@ -36,22 +36,22 @@ const getAllAcademicFaculty = CatchAsync(
 // Get Single Academic Semester Into Database
 const getSingleAcademicFaculty = CatchAsync(
   async (req: Request, res: Response) => {
-    const semesterId = req.params.id;
+    const facultyId = req.params.id;
     const result =
-      await AcademicFacultyServices.getSingleAcademicFacultyIntoDb(semesterId);
+      await AcademicFacultyServices.getSingleAcademicFacultyIntoDb(facultyId);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: `${semesterId} Academic Semester is retrieved successfully`,
+      message: `${facultyId} Academic Semester is retrieved successfully`,
       data: result,
     });
   },
 );
 
 const updateAcademicFaculty = CatchAsync(async (req, res) => {
-  const { semesterId } = req.params;
+  const { facultyId } = req.params;
   const result = await AcademicFacultyServices.updateAcademicFacultyIntoDB(
-    semesterId,
+    facultyId,
     req.body,
   );
 
@@ -63,7 +63,7 @@ const updateAcademicFaculty = CatchAsync(async (req, res) => {
   });
 });
 
-export const AcademicSemesterController = {
+export const AcademicFacultyController = {
   createAcademicFaculty,
   getAllAcademicFaculty,
   getSingleAcademicFaculty,
