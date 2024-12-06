@@ -15,10 +15,7 @@ router.get('/', AcademicFacultyController.getAllAcademicFaculty);
 
 // Get Single Academic faculty Into database
 
-router.get(
-  '/create-academic-faculty/:id',
-  AcademicFacultyController.getSingleAcademicFaculty,
-);
+router.get('/:id', AcademicFacultyController.getSingleAcademicFaculty);
 
 // Update academic faculty into db
 router.patch(
