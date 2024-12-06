@@ -13,18 +13,18 @@ router.post(
 
 router.get('/', AcademicFacultyController.getAllAcademicFaculty);
 
-// Get Single Academic Semester Into database
+// Get Single Academic faculty Into database
 
 router.get(
   '/create-academic-faculty/:id',
   AcademicFacultyController.getSingleAcademicFaculty,
 );
 
-// Update academic semester into db
+// Update academic faculty into db
 router.patch(
   '/:facultyId',
   validateRequest(academicFacultyValidations.academicFacultyValidationSchema),
   AcademicFacultyController.updateAcademicFaculty,
 );
 
-export const academicSemesterRoutes = router;
+export const academicFacultyRoutes = router;
