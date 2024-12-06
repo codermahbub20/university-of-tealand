@@ -13,10 +13,7 @@ router.post(
   AcademicSemesterController.createAcademicSemester,
 );
 
-router.get(
-  '/create-academic-semester',
-  AcademicSemesterController.getAllAcademicSemester,
-);
+router.get('/', AcademicSemesterController.getAllAcademicSemester);
 
 // Get Single Academic Semester Into database
 
