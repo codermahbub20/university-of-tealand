@@ -25,4 +25,13 @@ router.get(
   AcademicSemesterController.getSingleAcademicSemester,
 );
 
+// Update academic semester into db
+router.patch(
+  '/:semesterId',
+  validateRequest(
+    AcademicSemesterValidations.updateAcademicSemesterValidationSchema,
+  ),
+  AcademicSemesterControllers.updateAcademicSemester,
+);
+
 export const academicSemesterRoutes = router;

@@ -23,8 +23,28 @@ const getSingleAcademicSemesterIntoDb = async (semesterId: string) => {
   return result;
 };
 
+//  update academic semester into db
+const updateAcademicSemesterIntoDB = async (
+  id: string,
+  payload: Partial<TAcademicSemester>,
+) => {
+  if (
+    payload.name &&
+    payload.code &&
+    academicSemesterNameCodeMapper[payload.name] !== payload.code
+  ) {
+    throw new Error('Invalid Semester Code');
+  }
+
+  const result = await AcademicSemester.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
+  return result;
+};
+
 export const AcademicSemesterServices = {
   createAcademicSemesterIntoDB,
   getAllAcademicSemesterIntoDB,
   getSingleAcademicSemesterIntoDb,
+  updateAcademicSemesterIntoDB,
 };
