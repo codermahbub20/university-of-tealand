@@ -31,7 +31,7 @@ router.patch(
   validateRequest(
     AcademicSemesterValidations.updateAcademicSemesterValidationSchema,
   ),
-  AcademicSemesterControllers.updateAcademicSemester,
+  AcademicSemesterController.updateAcademicSemester,
 );
 
 export const academicSemesterRoutes = router;
