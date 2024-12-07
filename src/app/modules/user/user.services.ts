@@ -1,11 +1,13 @@
+import mongoose from 'mongoose';
 import config from '../../config';
 import { AcademicSemester } from '../academicSemestar/academicSemester.model';
 import { TStudent } from '../students/student.interface';
 import { Student } from '../students/student.model';
-
+import httpStatus from 'http-status';
 import { TUser } from './user.interface';
 import { User } from './user.model';
 import { generateStudentId } from './user.utils';
+import AppError from '../../errors/AppError';
 
 const createStudentIntoDB = async (password: string, studentData: TStudent) => {
   // create a object
@@ -22,20 +24,41 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
     studentData.admissionSemester,
   );
 
-  //   set manually generated id
-  userData.id = await generateStudentId(admissionSemester);
+  //  Start transaction roll back
+  const session = await mongoose.startSession();
 
-  // create a user
-  const newUser = await User.create(userData);
+  try {
+    //  start transaction
+    session.startTransaction();
 
-  //    create a student
-  if (Object.keys(newUser).length) {
+    //   set manually generated id
+    userData.id = await generateStudentId(admissionSemester);
+
+    // create a user
+    const newUser = await User.create([userData], { session });
+
+    //    create a student
+    if (!newUser.length) {
+      throw new AppError(httpStatus.Bad_request, 'Failed To Create User');
+    }
     // set id , _id as user
-    studentData.id = newUser.id;
-    studentData.user = newUser._id;
+    studentData.id = newUser[0].id;
+    studentData.user = newUser[0]._id;
 
-    const newStudent = await Student.create(studentData);
+    //  Create User Transaction---- 2
+    const newStudent = await Student.create([studentData], { session });
+
+    if (!newStudent.length) {
+      throw new AppError(httpStatus.Bad_request, 'Failed To Create Student');
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+
     return newStudent;
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
   }
 };
 
