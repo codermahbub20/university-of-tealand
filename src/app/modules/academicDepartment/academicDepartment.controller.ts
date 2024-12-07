@@ -35,7 +35,8 @@ const getAllAcademicDepartment = CatchAsync(
 // Get Single Academic Semester Into Database
 const getSingleAcademicDepartment = CatchAsync(
   async (req: Request, res: Response) => {
-    const departmentId = req.params.id;
+    const { departmentId } = req.params;
+    console.log(departmentId);
     const result =
       await AcademicDepartmentServices.getSingleAcademicDepartmentIntoDb(
         departmentId,

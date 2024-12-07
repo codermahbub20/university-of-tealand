@@ -13,8 +13,9 @@ const getAllAcademicDepartmentsIntoDB = async () => {
 
 // Get Single Academic Semester InToDB
 
-const getSingleAcademicDepartmentIntoDb = async (semesterId: string) => {
-  const result = await AcademicDepartment.findById(semesterId);
+const getSingleAcademicDepartmentIntoDb = async (departmentId: string) => {
+  console.log(departmentId);
+  const result = await AcademicDepartment.findById(departmentId);
   return result;
 };
 
