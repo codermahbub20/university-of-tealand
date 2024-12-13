@@ -9,6 +9,7 @@ import config from '../config';
 import handleZodError from '../errors/handleZodError';
 import handleValidationError from '../errors/handleValidationError';
 import handleCastError from '../errors/handleCastError';
+import handleCDuplicateError from '../errors/handleDuplicateError';
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next): any => {
   let statusCode = err.statusCode || 500;
@@ -38,6 +39,12 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next): any => {
   } else if (err?.name === 'CastError') {
     // Cast Error Here
     const simplifiedError = handleCastError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorSources = simplifiedError?.errorSources;
+  } else if (err?.code === 11000) {
+    //  Manage 1000 duplicate error
+    const simplifiedError = handleCDuplicateError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources;
