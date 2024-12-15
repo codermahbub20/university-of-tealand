@@ -16,7 +16,7 @@ const createCourse = CatchAsync(async (req: Request, res: Response) => {
 // Get all academic semester into db
 
 const getAllCourses = CatchAsync(async (req: Request, res: Response) => {
-  const Result = await CourseServices.getAllCoursesInToDB();
+  const Result = await CourseServices.getAllCoursesInToDB(req.query);
   sendResponse(res, {
     statusCode: 200,
     success: true,
