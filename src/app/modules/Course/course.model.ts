@@ -3,7 +3,10 @@ import { TCourse, TPreRequisite } from './course.interface';
 import { boolean } from 'zod';
 
 const preRequisiteSchema = new Schema<TPreRequisite>({
-  course: { type: Schema.Types.ObjectId },
+  course: {
+    type: Schema.Types.ObjectId,
+    ref: 'Course',
+  },
   isDeleted: {
     type: Boolean,
     default: false,

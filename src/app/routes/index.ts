@@ -13,11 +13,11 @@ const router = Router();
 const moduleRoutes = [
   {
     path: '/students',
-    routes: StudentRoutes,
+    route: StudentRoutes,
   },
   {
     path: '/users',
-    routes: userRoutes,
+    route: userRoutes,
   },
   {
     path: '/faculties',
@@ -29,19 +29,19 @@ const moduleRoutes = [
   },
   {
     path: '/academic-semesters',
-    routes: academicSemesterRoutes,
+    route: academicSemesterRoutes,
   },
   {
     path: '/academic-faculties',
-    routes: academicFacultyRoutes,
+    route: academicFacultyRoutes,
   },
   {
     path: '/academic-departments',
-    routes: academicDepartmentRoutes,
+    route: academicDepartmentRoutes,
   },
   {
     path: '/courses',
-    routes: courseRoutes,
+    route: courseRoutes,
   },
 ];
 
