@@ -16,7 +16,23 @@ const createCourseValidationSchema = z.object({
   }),
 });
 
-const updateCourseValidationSchema = createCourseValidationSchema.partial(); // here i use partial for zod validation , zod validation provide a partial method , this method use to the all required or non required field are converted to the optional
+const updatePreRequisiteCourseValidationSchema = z.object({
+  course: z.string(),
+  isDeleted: z.boolean().optional(),
+});
+
+const updateCourseValidationSchema = z.object({
+  body: z.object({
+    title: z.string().optional(),
+    prefix: z.string().optional(),
+    code: z.number().optional(),
+    credits: z.number().optional(),
+    preRequisiteCourse: z
+      .array(updatePreRequisiteCourseValidationSchema)
+      .optional(),
+    isDeleted: z.boolean().optional(),
+  }),
+});
 
 export const CourseValidations = {
   createCourseValidationSchema,
