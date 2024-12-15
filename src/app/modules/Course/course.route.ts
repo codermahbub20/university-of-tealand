@@ -22,10 +22,10 @@ router.get('/:id', CourseController.getSingleCourse);
 router.delete('/:id', CourseController.deleteCourse);
 
 // Update Course into db
-// router.patch(
-//   '/:facultyId',
-//   validateRequest(),
-//   AcademicFacultyController.updateAcademicFaculty,
-// );
+router.patch(
+  '/:id',
+  validateRequest(CourseValidations.updateCourseValidationSchema),
+  CourseController.updateCourse,
+);
 
 export const courseRoutes = router;
