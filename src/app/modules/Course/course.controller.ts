@@ -52,9 +52,21 @@ const getSingleCourse = CatchAsync(async (req: Request, res: Response) => {
 //   });
 // });
 
+const deleteCourse = CatchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await CourseServices.deleteCourseInToDB(id);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: `${id} Course deleted successfully`,
+    data: result,
+  });
+});
+
 export const AcademicFacultyController = {
   createCourse,
   getAllCourses,
   getSingleCourse,
   //   updateAcademicFaculty,
+  deleteCourse,
 };
