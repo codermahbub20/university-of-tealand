@@ -21,6 +21,11 @@ router.get('/:id', CourseController.getSingleCourse);
 
 router.delete('/:id', CourseController.deleteCourse);
 
+router.put(
+  '/:courseId/assign-faculties',
+  CourseController.assignFacultiesWithCourse,
+);
+
 // Update Course into db
 router.patch(
   '/:id',
