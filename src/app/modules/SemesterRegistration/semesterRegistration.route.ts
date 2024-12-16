@@ -26,10 +26,12 @@ router.get(
 
 // router.delete('/:id', CourseController.deleteCourse);
 
-// router.put(
-//   '/:courseId/assign-faculties',
-//   validateRequest(CourseValidations.assignFacultiesWithCourseValidationSchema),
-//   CourseController.assignFacultiesWithCourse,
-// );
+router.patch(
+  '/:id',
+  validateRequest(
+    SemesterValidations.updateSemesterRegistrationValidationSchema,
+  ),
+  SemesterRegistrationController.updateSemesterRegistration,
+);
 
 export const semesterRegistrationsRoutes = router;

@@ -50,17 +50,18 @@ const getSingleSemesterRegistration = CatchAsync(
   },
 );
 
-// const updateCourse = CatchAsync(async (req, res) => {
-//   const { id } = req.params;
-//   const result = await CourseServices.updateCourseInToDb(id, req.body);
+const updateSemesterRegistration = CatchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result =
+    await SemesterRegistrationService.updateSemesterRegistrationFromDB(id);
 
-//   sendResponse(res, {
-//     statusCode: 200,
-//     success: true,
-//     message: 'Course Is Updated successfully',
-//     data: result,
-//   });
-// });
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Semester Registration Updated successfully',
+    data: result,
+  });
+});
 
 // const deleteCourse = CatchAsync(async (req: Request, res: Response) => {
 //   const id = req.params.id;
@@ -77,7 +78,7 @@ export const SemesterRegistrationController = {
   createSemesterRegistration,
   getAllSemesterRegistration,
   getSingleSemesterRegistration,
-  //   updateCourse,
+  updateSemesterRegistration,
   //   deleteCourse,
   //   assignFacultiesWithCourse,
   //   removeFacultiesFromCourse,
