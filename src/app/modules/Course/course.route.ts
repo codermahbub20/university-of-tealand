@@ -23,6 +23,7 @@ router.delete('/:id', CourseController.deleteCourse);
 
 router.put(
   '/:courseId/assign-faculties',
+  validateRequest(CourseValidations.assignFacultiesWithCourseValidationSchema),
   CourseController.assignFacultiesWithCourse,
 );
 
