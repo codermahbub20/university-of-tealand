@@ -53,7 +53,10 @@ const getSingleSemesterRegistration = CatchAsync(
 const updateSemesterRegistration = CatchAsync(async (req, res) => {
   const { id } = req.params;
   const result =
-    await SemesterRegistrationService.updateSemesterRegistrationFromDB(id);
+    await SemesterRegistrationService.updateSemesterRegistrationFromDB(
+      id,
+      req.body,
+    );
 
   sendResponse(res, {
     statusCode: 200,
@@ -62,17 +65,6 @@ const updateSemesterRegistration = CatchAsync(async (req, res) => {
     data: result,
   });
 });
-
-// const deleteCourse = CatchAsync(async (req: Request, res: Response) => {
-//   const id = req.params.id;
-//   const result = await CourseServices.deleteCourseInToDB(id);
-//   sendResponse(res, {
-//     statusCode: 200,
-//     success: true,
-//     message: `${id} Course deleted successfully`,
-//     data: result,
-//   });
-// });
 
 export const SemesterRegistrationController = {
   createSemesterRegistration,
