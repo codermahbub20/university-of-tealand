@@ -1,6 +1,7 @@
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
 import { AcademicSemester } from '../academicSemestar/academicSemester.model';
+import { RegistrationStatus } from './semesterRegistration.constant';
 import { TSemesterRegistration } from './semesterRegistration.interface';
 import { SemesterRegistration } from './semesterRegistration.model';
 
@@ -13,7 +14,10 @@ const createSemesterRegistrationIntoDB = async (
 
   const isThereAnyOngoingOrUpcomingSemester =
     await SemesterRegistration.findOne({
-      $or: [{ status: 'UPCOMING' }, { status: 'ONGOING' }],
+      $or: [
+        { status: RegistrationStatus.UPCOMING },
+        { status: RegistrationStatus.ONGOING },
+      ],
     });
 
   if (isThereAnyOngoingOrUpcomingSemester) {
@@ -84,10 +88,39 @@ const updateSemesterRegistrationFromDB = async (
   // If The requested semester is ended , we will not updated
 
   const currentSemesterStatus = isSemesterRegistrationExist?.status;
+  const requestedStatus = payload?.status;
 
-  if (currentSemesterStatus === 'ENDED') {
+  if (currentSemesterStatus === RegistrationStatus.ENDED) {
     throw new AppError(400, `This Semester already ${currentSemesterStatus}`);
   }
+
+  // UPCOMING ---> ONGOING ----->  ENDED
+  if (
+    currentSemesterStatus === RegistrationStatus.UPCOMING &&
+    requestedStatus === RegistrationStatus.ENDED
+  ) {
+    throw new AppError(
+      400,
+      `You can not directly change status from ${currentSemesterStatus} to ${requestedStatus}`,
+    );
+  }
+
+  if (
+    currentSemesterStatus === RegistrationStatus.ONGOING &&
+    requestedStatus === RegistrationStatus.UPCOMING
+  ) {
+    throw new AppError(
+      400,
+      `You can not directly change status from ${currentSemesterStatus} to ${requestedStatus}`,
+    );
+  }
+
+  const result = await SemesterRegistration.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
 };
 
 export const SemesterRegistrationService = {
