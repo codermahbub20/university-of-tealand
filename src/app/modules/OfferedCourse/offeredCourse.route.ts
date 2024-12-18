@@ -13,11 +13,11 @@ router.post(
 
 // router.get('/:studentId', StudentControllers.getSingleStudent);
 
-// router.patch(
-//   '/:studentId',
-//   validateRequest(updateStudentValidationSchema),
-//   StudentControllers.updateStudent,
-// );
+router.patch(
+  '/:id',
+  validateRequest(OfferedCourseValidation.updateOfferedCourseValidationSchema),
+  OfferedCourseController.updateOfferedCourse,
+);
 
 // router.delete('/:studentId', StudentControllers.deleteStudent);
 
