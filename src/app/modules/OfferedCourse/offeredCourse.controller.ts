@@ -25,6 +25,7 @@ const updateOfferedCourse = CatchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 export const OfferedCourseController = {
   createOfferedCourse,
   updateOfferedCourse,
