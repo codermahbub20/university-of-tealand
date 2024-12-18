@@ -23,4 +23,4 @@ router.post(
 
 // router.get('/', StudentControllers.getAllStudents);
 
-export const StudentRoutes = router;
+export const offeredCourseRoutes = router;
