@@ -1,7 +1,9 @@
+import config from '../../config';
 import AppError from '../../errors/AppError';
 import { User } from '../user/user.model';
 import { TLoginUser } from './auth.interface';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const loginUser = async (payload: TLoginUser) => {
   // checking is user is exist
@@ -33,6 +35,21 @@ const loginUser = async (payload: TLoginUser) => {
   //     isUserExist?.password,
   //   );
 
+  //   create token and sent to the client
+
+  const jwtPayload = {
+    userId: user.id,
+    role: user.role,
+  };
+
+  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+    expiresIn: '10d',
+  });
+
+  return {
+    accessToken,
+    needsPasswordChange: user?.needsPasswordChange,
+  };
   //
 };
 
