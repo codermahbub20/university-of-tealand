@@ -3,8 +3,9 @@ import CatchAsync from '../utils/CatchAsync';
 import AppError from '../errors/AppError';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
+import { TUserRole } from '../modules/user/user.interface';
 
-const auth = () => {
+const auth = (...requiredRoles: TUserRole[]) => {
   return CatchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
 
@@ -22,6 +23,12 @@ const auth = () => {
           throw new AppError(401, 'You are not authorized user');
         }
         // decoded undefined
+        const role = (decoded as JwtPayload).role;
+
+        if (requiredRoles && !requiredRoles.includes(role)) {
+          throw new AppError(401, 'You are not authorized user');
+        }
+
         req.user = decoded as JwtPayload;
         next();
       },
