@@ -65,7 +65,10 @@ userSchema.statics.isJwtIssuedBeforePasswordChange = async function (
   passwordChangedTimeStamp: Date,
   jwtIssuedTimeStamp: number,
 ) {
-  return await User.findOne({ id });
+  const passwordChangeTime =
+    new Date(passwordChangedTimeStamp).getTime() / 1000;
+
+  return passwordChangeTime > jwtIssuedTimeStamp;
 };
 
 userSchema.statics.isPasswordMatched = async function (

@@ -40,6 +40,13 @@ const auth = (...requiredRoles: TUserRole[]) => {
       throw new AppError(404, 'This user is already blocked!');
     }
 
+    if (
+      user?.passwordChangeAt &&
+      User.isJwtIssuedBeforePasswordChange(user.passwordChangeAt, iat as number)
+    ) {
+      throw new AppError(401, 'You are not authorized user');
+    }
+
     if (requiredRoles && !requiredRoles.includes(role)) {
       throw new AppError(401, 'You are not authorized user');
     }
