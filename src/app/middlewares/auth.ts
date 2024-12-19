@@ -4,6 +4,7 @@ import AppError from '../errors/AppError';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
 import { TUserRole } from '../modules/user/user.interface';
+import { User } from '../modules/user/user.model';
 
 const auth = (...requiredRoles: TUserRole[]) => {
   return CatchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -14,25 +15,37 @@ const auth = (...requiredRoles: TUserRole[]) => {
     }
 
     // check if the token are valid
-    jwt.verify(
+    const decoded = jwt.verify(
       token,
       config.jwt_access_secret as string,
-      function (err, decoded) {
-        // err
-        if (err) {
-          throw new AppError(401, 'You are not authorized user');
-        }
-        // decoded undefined
-        const role = (decoded as JwtPayload).role;
+    ) as JwtPayload;
 
-        if (requiredRoles && !requiredRoles.includes(role)) {
-          throw new AppError(401, 'You are not authorized user');
-        }
+    const { role, userId, iat } = decoded.role;
 
-        req.user = decoded as JwtPayload;
-        next();
-      },
-    );
+    const user = await User.isUserExistByCustomId(userId);
+    // custom statics check here
+    if (!user) {
+      throw new AppError(404, 'This user is not found !');
+    }
+
+    //   checking is the user already deleted
+    const isUserDeleted = user?.isDeleted;
+    if (isUserDeleted) {
+      throw new AppError(404, 'This user is already deleted!');
+    }
+
+    //   checking is the user already blocked
+    const userStatus = user?.status;
+    if (userStatus === 'blocked') {
+      throw new AppError(404, 'This user is already blocked!');
+    }
+
+    if (requiredRoles && !requiredRoles.includes(role)) {
+      throw new AppError(401, 'You are not authorized user');
+    }
+
+    req.user = decoded as JwtPayload;
+    next();
   });
 };
 
