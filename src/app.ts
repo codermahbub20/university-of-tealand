@@ -1,21 +1,27 @@
-import express, { Application, NextFunction, Request, Response } from 'express';
-
-const app: Application = express();
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { error } from 'console';
-import globalErrorHandler from './app/middlewares/globalErrorHandalers';
+import express, { Application, Request, Response } from 'express';
+import globalErrorHandler from './app/middlewares/globalErrorhandler';
 import notFound from './app/middlewares/notFound';
 import router from './app/routes';
 
-//  parsers
+const app: Application = express();
+
+//parsers
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+
+app.use(cors({ origin: ['http://localhost:5173'], credentials: true }));
 
 // application routes
 app.use('/api/v1', router);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
+  res.send('Hi Next Level Developer !');
 });
 
 app.use(globalErrorHandler);

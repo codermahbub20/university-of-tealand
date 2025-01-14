@@ -1,54 +1,50 @@
-import { Request, Response } from 'express';
-import CatchAsync from '../../utils/CatchAsync';
 import httpStatus from 'http-status';
+import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { AcademicFacultyServices } from './academicFaculty.service';
 
-const createAcademicFaculty = CatchAsync(
-  async (req: Request, res: Response) => {
-    const result = await AcademicFacultyServices.createAcademicFacultyIntoDB(
-      req.body,
-    );
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'Academic Faculty is retrieved successfully',
-      data: result,
-    });
-  },
-);
+const createAcademicFaculty = catchAsync(async (req, res) => {
+  const result = await AcademicFacultyServices.createAcademicFacultyIntoDB(
+    req.body,
+  );
 
-// Get all academic semester into db
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic faculty is created succesfully',
+    data: result,
+  });
+});
 
-const getAllAcademicFaculty = CatchAsync(
-  async (req: Request, res: Response) => {
-    const Result =
-      await AcademicFacultyServices.getAllAcademicFacultiesIntoDB();
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'All Academic Faculty is retrieved successfully',
-      data: Result,
-    });
-  },
-);
+const getAllAcademicFaculties = catchAsync(async (req, res) => {
+  const result = await AcademicFacultyServices.getAllAcademicFacultiesFromDB(
+    req.query,
+  );
 
-// Get Single Academic Semester Into Database
-const getSingleAcademicFaculty = CatchAsync(
-  async (req: Request, res: Response) => {
-    const facultyId = req.params.id;
-    const result =
-      await AcademicFacultyServices.getSingleAcademicFacultyIntoDb(facultyId);
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: `${facultyId} Academic Semester is retrieved successfully`,
-      data: result,
-    });
-  },
-);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic faculties are retrieved successfully',
+    meta: result.meta,
+    data: result.result,
+  });
+});
 
-const updateAcademicFaculty = CatchAsync(async (req, res) => {
+const getSingleAcademicFaculty = catchAsync(async (req, res) => {
+  const { facultyId } = req.params;
+
+  const result =
+    await AcademicFacultyServices.getSingleAcademicFacultyFromDB(facultyId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic faculty is retrieved succesfully',
+    data: result,
+  });
+});
+
+const updateAcademicFaculty = catchAsync(async (req, res) => {
   const { facultyId } = req.params;
   const result = await AcademicFacultyServices.updateAcademicFacultyIntoDB(
     facultyId,
@@ -58,14 +54,14 @@ const updateAcademicFaculty = CatchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Academic semester is retrieved succesfully',
+    message: 'Academic faculty is updated succesfully',
     data: result,
   });
 });
 
-export const AcademicFacultyController = {
+export const AcademicFacultyControllers = {
   createAcademicFaculty,
-  getAllAcademicFaculty,
+  getAllAcademicFaculties,
   getSingleAcademicFaculty,
   updateAcademicFaculty,
 };

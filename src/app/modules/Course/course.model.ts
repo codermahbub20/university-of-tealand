@@ -1,17 +1,25 @@
-import { model, Schema } from 'mongoose';
-import { TCourse, TCourseFaculty, TPreRequisite } from './course.interface';
-import { boolean } from 'zod';
+import { Schema, model } from 'mongoose';
+import {
+  TCourse,
+  TCoursefaculty,
+  TPreRequisiteCourses,
+} from './course.interface';
 
-const preRequisiteSchema = new Schema<TPreRequisite>({
-  course: {
-    type: Schema.Types.ObjectId,
-    ref: 'Course',
+const preRequisiteCoursesSchema = new Schema<TPreRequisiteCourses>(
+  {
+    course: {
+      type: Schema.Types.ObjectId,
+      ref: 'Course',
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-  isDeleted: {
-    type: Boolean,
-    default: false,
+  {
+    _id: false,
   },
-});
+);
 
 const courseSchema = new Schema<TCourse>({
   title: {
@@ -35,16 +43,16 @@ const courseSchema = new Schema<TCourse>({
     trim: true,
     required: true,
   },
+  preRequisiteCourses: [preRequisiteCoursesSchema],
   isDeleted: {
     type: Boolean,
     default: false,
   },
-  preRequisiteCourse: [preRequisiteSchema],
 });
 
 export const Course = model<TCourse>('Course', courseSchema);
 
-const courseFacultySchema = new Schema<TCourseFaculty>({
+const courseFacultySchema = new Schema<TCoursefaculty>({
   course: {
     type: Schema.Types.ObjectId,
     ref: 'Course',
@@ -53,13 +61,12 @@ const courseFacultySchema = new Schema<TCourseFaculty>({
   faculties: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Course',
-      unique: true,
+      ref: 'Faculty',
     },
   ],
 });
 
-export const CourseFaculty = model<TCourseFaculty>(
+export const CourseFaculty = model<TCoursefaculty>(
   'CourseFaculty',
   courseFacultySchema,
 );
